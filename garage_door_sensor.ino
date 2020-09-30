@@ -90,7 +90,7 @@ void setup() {
   if (connectClient()) {
     //Send cover entity details to home assistant on initial connection
     //for auto discovery
-    StaticJsonDocument<525> mqttConfig;
+    StaticJsonDocument<1024> mqttConfig;
     mqttConfig["name"] = mqttDeviceName;
     mqttConfig["dev_cla"] = mqttDeviceClass; 
     mqttConfig["stat_t"] = stateTopic;
@@ -108,7 +108,14 @@ void setup() {
     mqttConfig["pl_avail"] = payloadAvailable;
     mqttConfig["pl_not_avail"] = payloadNotAvailable;
     mqttConfig["uniq_id"] = mqttDeviceClientId;
-    char json[525];
+    
+    mqttConfig["dev"]["name"] = mqttDeviceClientId;
+    mqttConfig["dev"]["mf"] = manufacturer;
+    mqttConfig["dev"]["mdl"] = model;
+    mqttConfig["dev"]["sw"] = softwareVersion;
+    mqttConfig["dev"]["ids"][0] = mqttDeviceClientId;
+    
+    char json[1024];
     serializeJsonPretty(mqttConfig, json);
     client.publish(configTopic, json, true); 
 

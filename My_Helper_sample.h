@@ -13,6 +13,9 @@ const char* availabilityTopic = "homeassistant/cover/garage/door/availability";
 const char* doorStatus = "";
 const char* prevDoorStatus = "";
 
+const char* softwareVersion = "1.1";
+const char* manufacturer = "NandPez";
+const char* model = "Wemos D1 Mini / 1ch Relay / Sommer Conex & Output OC";
 String mqttDeviceClientId = "GarageController";
 const char* mqttDeviceName = "Garage Door";
 const char* mqttDeviceClass = "garage";
