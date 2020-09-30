@@ -11,14 +11,17 @@ This is my version of the excellent [garage_pi](https://github.com/azrael783/gar
 * Arduino JSON - v6.15.1
 * PubSubClient - v2.7.0
 * ESP8266WiFi
+* ArduinoOTA
 
 **Hardware**
 
 * [Sommer Pro+ / Base+](https://www.sommer.eu/en-GB/pro-base.html)
 * [Sommer Conex Adapter](https://www.sommer-shops.eu/de/conex.html)
+* [Sommer Output OC Adapter](https://www.amazon.co.uk/gp/product/B07XZKDFX9/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1)
 * [Wemos D1 Mini](https://docs.wemos.cc/en/latest/d1/d1_mini.html)
-* [2 Channel-Relay](https://www.amazon.co.uk/gp/product/B07GXC4FGP?ref=ppx_pt2_dt_b_prod_image)
+* [1 Channel Relay Shield](https://www.amazon.co.uk/gp/product/B07DK1FZF9/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&psc=1)
 * [A 24V to 12v USB Power Adaptor](https://www.amazon.co.uk/gp/product/B07NMPDDN7/ref=ppx_yo_dt_b_asin_title_o02_s00?ie=UTF8&psc=1)
+* [Wemos D1 Mini Relay Case](https://www.thingiverse.com/thing:2667568)
 
 ## Setup ##
 
@@ -36,9 +39,9 @@ Click on the `My_Helper.h` tab, that is where you will add your WiFi credentials
 
 **Wiring**
 
-The `5V` and `G` of the Wemos will connect to the `VCC` and `GND` of the relay. Then connect `D6` to `IN2` and `D5` to `IN1`.
+You will need to solder a wire to `G` and `A0` on the bottom of the D1 Mini. Plug these into the `GND` and `OUT` pins on the Output OC PCB respectively.
 
-Then you connect the relay to the Sommer Conex PCB. The `NO1` terminal should connect to `T1` on the Conex, `NO2` to `T2`, with both `COM` terminals connecting to the centre pin.
+Connect the relay to the Sommer Conex PCB. The `NO` terminal should connect to `T1` on the Conex, `NC` to `T2`, with `COM` terminal connecting to the centre pin.
 
 Finally the USB power Adapter needs to be plugged into the `24v` and `Ground` of the Sommer circuit board.
 
@@ -58,6 +61,8 @@ The next step is to simply plug your device in the computer, Go to `Tools -> Por
 
 For me this usually says something `dev/usbserial...`
 
+You will only need the device plugged in on your first upload, after that you should see your devices name and it's IP address in the port list.
+
 Now you just click on the upload button in the top left corner of the IDE, it's the right-facing arrow.
 
 After a bit of time compiling, the script should be uploaded to the device and begin scanning for the car.
@@ -68,13 +73,15 @@ If the upload doesn't work the most likely cause is that you forgot to rename th
 
 ## Integrating with Home Assistant ##
 
-The simplest way to integrate with [Home Assistant](https://home-assistant.io) is to add a new `cover` to the `configuration.yaml` like this:
+The simplest way to integrate with [Home Assistant](https://home-assistant.io) is to turn on [MQTT discovery](https://www.home-assistant.io/docs/mqtt/discovery/). With this activated the device will be added automatically.
+
+Alternatively you can add a new `cover` to the `configuration.yaml` like this:
 
     cover:
     - platform: mqtt
       name: Garage Door
-      command_topic: "garage/door/output"
-      state_topic: "garage/door"
+      command_topic: "homeassistant/cover/garage/set"
+      state_topic: "homeassistant/cover/garage/state"
       state_open: "open"
       state_opening: "opening"
       state_closed: "closed"
@@ -84,3 +91,10 @@ The simplest way to integrate with [Home Assistant](https://home-assistant.io) i
       qos: 1
       optimistic: true
       device_class: garage
+
+## Finshed Product ##
+
+Here is what the final project looks like for me now:
+
+![Finished Product](files/finished_product.jpg)
+![In the Wild](files/in_the_wild.jpg)
