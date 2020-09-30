@@ -6,14 +6,29 @@ const char* password = "YOUR_WIFI_PASSWORD";
 const char* mqtt_user = "YOUR_MQTT_USER";
 const char* mqtt_password = "YOUR_MQTT_PASSWORD";
 const char* mqtt_server = "YOUR_MQTT_SERVER";
-const char* stateTopic = "garage/door";
-const char* subTopic = "garage/door/output";
+const char* stateTopic = "homeassistant/cover/garage/door/state";
+const char* commandTopic = "homeassistant/cover/garage/door/set";
+const char* configTopic = "homeassistant/cover/garage/door/config";
+const char* availabilityTopic = "homeassistant/cover/garage/door/availability";
 const char* doorStatus = "";
 const char* prevDoorStatus = "";
 
-const int channel1RelaySwitch = D5;
-const int channel2RelaySwitch = D6;
+String mqttDeviceClientId = "GarageController";
+const char* mqttDeviceName = "Garage Door";
+const char* mqttDeviceClass = "garage";
 
+int prevDoorState;
+int openThreshold = 15;
+
+const int relaySwitch = D1;
+
+const int doorInput = A0;
+
+const int conexT1 = LOW;
+const int conexT2 = HIGH;
+
+const int openDoor = conexT2;
+const int closeDoor = conexT1;
 
 //Statuses
 const char* opened = "open";
@@ -22,9 +37,11 @@ const char* closing = "closing";
 const char* opening = "opening";
 const char* stopped = "stopped";
 
-//Commands
-const char* OPEN = "OPEN";
-const char* CLOSE = "CLOSE";
-const char* STOP = "STOP";
+//pay loads
+const char* payloadOpen = "OPEN";
+const char* payloadClose = "CLOSE";
+const char* payloadStop = "STOP";
+const char* payloadAvailable = "online";
+const char* payloadNotAvailable = "offline";
 
 #endif
