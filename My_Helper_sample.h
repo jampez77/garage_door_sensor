@@ -22,6 +22,7 @@ const char* mqttDeviceClass = "garage";
 
 int prevDoorState;
 int openThreshold = 15;
+boolean configDetailsSent = false;
 
 const int relaySwitch = D1;
 
