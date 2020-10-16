@@ -98,3 +98,34 @@ Here is what the final project looks like for me now:
 
 ![Finished Product](files/finished_product.jpg)
 ![In the Wild](files/in_the_wild.jpg)
+
+## Changelog ##
+
+### Version 1.0 - Better integration with Home Assistant, Over The Air updates ###
+
+Moved to a 1 Channel Relay model.
+
+Added analog input for Output OC to receive live door status.
+
+ArduinoOTA for wireless code updates.
+
+Added MQTT config on boot to integrate seamlessly with Home Assistant.
+
+Added availability topic so we can report an offline/unavailable status to Home Assistant.
+
+### Version 1.1 - Better integration with Home Assistant. ###
+
+Added Device Registry info fo better integration with Home Assistants UI.
+
+Make, Model, Version etc.
+
+Should appear as a device with one entity upon initial connection.
+
+
+### Version 1.2 - Added LED status indicator and WiFi auto reconnect. ###
+
+* Solid light = No WiFi connection
+* Flashing Light = no MQTT connection
+* No light = connection established
+
+WiFi will now attempt to reconnect to network if it loose it post setup.

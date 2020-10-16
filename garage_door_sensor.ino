@@ -21,7 +21,7 @@ PubSubClient client(espClient);
 void setup() {
 
   pinMode(relaySwitch, OUTPUT);
-
+  pinMode(ledPin, OUTPUT);
   pinMode(doorInput, INPUT);
   
   Serial.begin(115200);
@@ -74,12 +74,17 @@ void loop() {
   //OTA client code
   ArduinoOTA.handle();
 
+  //attempt connection to WiFi if we don't have it
+  if(!espClient.connected()){
+    setup_wifi();
+  }
+
   //while connected we send the current door status
   //and trigger relay if we need to
   if(client.connected()){
     client.loop();
-  
     delay(1000);
+    digitalWrite(ledPin, HIGH);
     getAndSendDoorStatus();
   } else {
     connectClient();
@@ -103,9 +108,11 @@ void setup_wifi() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    digitalWrite(ledPin, LOW);
   }
   
   randomSeed(micros());
+  digitalWrite(ledPin, HIGH);
   
   Serial.println("");
   Serial.println("WiFi connected");
@@ -116,6 +123,10 @@ void setup_wifi() {
 boolean connectClient() {
   // Loop until we're connected
   while (!client.connected()) {
+    configDetailsSent = false;
+    digitalWrite(ledPin, HIGH);
+    delay(100);
+    digitalWrite(ledPin, LOW);
     Serial.print("Attempting MQTT connection...");
     // Check connection
     if (client.connect(mqttDeviceClientId.c_str(), mqtt_user, mqtt_password, availabilityTopic, 0, true, payloadNotAvailable)) {
@@ -129,6 +140,10 @@ boolean connectClient() {
       Serial.println("Subscribed to: ");
       Serial.println(commandTopic);
       Serial.println(availabilityTopic);
+
+      while(!configDetailsSent){
+        sendConfigDetailsToHA();
+      }
       return true;
     } else {
       Serial.print("failed, rc=");
