@@ -101,6 +101,28 @@ Here is what the final project looks like for me now:
 
 ## Changelog ##
 
+### Version 1.3 - Bug fixes ###
+
+Added an additional check for the door status to prevent incorrect status being sent.
+
+State is now checked twice with a gap of 0.5 seconds. MQTT publish is only done when both values agree on a state and that state is different from the previous one.
+
+### Version 1.2 - Added LED status indicator and WiFi auto reconnect. ###
+
+* Solid light = No WiFi connection
+* Flashing Light = no MQTT connection
+* No light = connection established
+
+WiFi will now attempt to reconnect to network if it loose it post setup.
+
+### Version 1.1 - Better integration with Home Assistant. ###
+
+Added Device Registry info fo better integration with Home Assistants UI.
+
+Make, Model, Version etc.
+
+Should appear as a device with one entity upon initial connection.
+
 ### Version 1.0 - Better integration with Home Assistant, Over The Air updates ###
 
 Moved to a 1 Channel Relay model.
@@ -112,20 +134,3 @@ ArduinoOTA for wireless code updates.
 Added MQTT config on boot to integrate seamlessly with Home Assistant.
 
 Added availability topic so we can report an offline/unavailable status to Home Assistant.
-
-### Version 1.1 - Better integration with Home Assistant. ###
-
-Added Device Registry info fo better integration with Home Assistants UI.
-
-Make, Model, Version etc.
-
-Should appear as a device with one entity upon initial connection.
-
-
-### Version 1.2 - Added LED status indicator and WiFi auto reconnect. ###
-
-* Solid light = No WiFi connection
-* Flashing Light = no MQTT connection
-* No light = connection established
-
-WiFi will now attempt to reconnect to network if it loose it post setup.
