@@ -20,7 +20,6 @@ String mqttDeviceClientId = "GarageController";
 const char* mqttDeviceName = "Garage Door";
 const char* mqttDeviceClass = "garage";
 
-int prevDoorState;
 int openThreshold = 15;
 boolean configDetailsSent = false;
 

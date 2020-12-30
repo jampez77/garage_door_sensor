@@ -222,26 +222,57 @@ void callback(char* topic, byte* message, unsigned int length) {
 }
 
 void getAndSendDoorStatus(){
-  int doorState = analogRead(doorInput);
+   int initialDoorState = analogRead(doorInput);
 
-  //determine door state based on openThreshold
-  if(doorState < openThreshold){
-    statusToOpen();
+   const char* initialDoorStatus = "";
+
+   //determine initial door state based on openThreshold
+  if(initialDoorState <= openThreshold){
+    initialDoorStatus = opened;
   } else {
-    statusToClosed();
+    initialDoorStatus = closed;
   }
 
-  //publish to doorStatus to HA
-  //if it has changed
-  //then trigger the relay if we need to
-  if(prevDoorStatus != doorStatus){
-    Serial.print("Door ");
-    Serial.println(doorStatus);
-    client.publish(stateTopic, doorStatus, true); 
+  delay(500);
 
-    prevDoorStatus = doorStatus;
-  } 
+  int secondaryDoorState = analogRead(doorInput);
+
+  const char* secondaryDoorStatus = "";
+
+   //determine secondary door state based on openThreshold
+  if(secondaryDoorState <= openThreshold){
+    secondaryDoorStatus = opened;
+  } else {
+    secondaryDoorStatus = closed;
+  }
+
+  //only send new door status if initial and secondary check are in agreement
+  //and if status is different from previous one
+  if(initialDoorStatus == secondaryDoorStatus){
+      //set door status
+      if(initialDoorState <= openThreshold){
+        statusToOpen();
+      } else {
+        statusToClosed();
+      }
+
+      sendDoorStatus();
+  }
   
+}
+
+void sendDoorStatus(){
+    //publish to doorStatus to HA
+    //if it has changed
+    //then trigger the relay if we need to
+   
+    if(prevDoorStatus != doorStatus){
+      Serial.print("Door ");
+      Serial.println(doorStatus);
+      client.publish(stateTopic, doorStatus, true); 
+  
+      prevDoorStatus = doorStatus;
+    } 
 }
 
 void closeTheDoor(){
