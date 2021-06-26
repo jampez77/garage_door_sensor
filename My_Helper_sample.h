@@ -7,6 +7,7 @@ const char* mqtt_user = "YOUR_MQTT_USER";
 const char* mqtt_password = "YOUR_MQTT_PASSWORD";
 const char* mqtt_server = "YOUR_MQTT_SERVER";
 const char* stateTopic = "homeassistant/cover/garage/door/state";
+const char* coverDebugTopic = "homeassistant/cover/garage/door/debug";
 const char* commandTopic = "homeassistant/cover/garage/door/set";
 const char* configTopic = "homeassistant/cover/garage/door/config";
 const char* availabilityTopic = "homeassistant/cover/garage/door/availability";

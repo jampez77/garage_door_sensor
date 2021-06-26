@@ -237,6 +237,16 @@ void getAndSendDoorStatus(){
 
   int secondaryDoorState = analogRead(doorInput);
 
+  //send initial and secondary readings to debug topic
+  DynamicJsonDocument debugJsonDoc(100);
+  debugJsonDoc["initial"] = initialDoorState;
+  debugJsonDoc["secondary"] = secondaryDoorState;
+  debugJsonDoc["openThreshold"] = openThreshold;
+
+  char debugJson[100];
+  serializeJsonPretty(debugJsonDoc, debugJson);
+  client.publish(coverDebugTopic, debugJson, false); 
+
   const char* secondaryDoorStatus = "";
 
    //determine secondary door state based on openThreshold
