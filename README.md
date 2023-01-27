@@ -4,6 +4,12 @@
 
 This is my version of the excellent [garage_pi](https://github.com/azrael783/garage_pi) project by [Daniel](https://github.com/azrael783/) that uses a WeMos D1 mini instead of a Raspberry Pi Zero.
 
+
+Enjoying this? Help me out with a :beers: or :coffee:!
+
+[![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/jampez77)
+
+
 ## Prerequisites ##
 
 **Software**
