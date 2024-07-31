@@ -7,7 +7,7 @@ This is my version of the excellent [garage_pi](https://github.com/azrael783/gar
 
 Enjoying this? Help me out with a :beers: or :coffee:!
 
-[![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/jampez77)
+[![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/whenitworks)
 
 
 ## Prerequisites ##
