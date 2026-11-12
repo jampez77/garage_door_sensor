@@ -14,14 +14,14 @@ const char* availabilityTopic = "homeassistant/cover/garage/door/availability";
 const char* doorStatus = "";
 const char* prevDoorStatus = "";
 
-const char* softwareVersion = "1.3.1";
+const char* softwareVersion = "2.0.0";
 const char* manufacturer = "NandPez";
 const char* model = "Wemos D1 Mini / 1ch Relay / Sommer Conex & Output OC";
 String mqttDeviceClientId = "GarageController";
 const char* mqttDeviceName = "Garage Door";
 const char* mqttDeviceClass = "garage";
 
-int openThreshold = 15;
+int openThreshold = 43;
 boolean configDetailsSent = false;
 
 const int relaySwitch = D1;

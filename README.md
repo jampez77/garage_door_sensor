@@ -14,10 +14,9 @@ Enjoying this? Help me out with a :beers: or :coffee:!
 
 **Software**
 * [Arduino IDE](https://www.arduino.cc/en/main/software) - I'm using v1.8.12
-* Arduino JSON - v6.15.1
-* PubSubClient - v2.7.0
-* ESP8266WiFi
-* ArduinoOTA
+* ArduinoJson 6.x (build verified with 6.21.6)
+* PubSubClient 2.8
+* ESP8266 Arduino core (build verified with 3.1.2), including ESP8266WiFi, ArduinoOTA and LittleFS
 
 **Hardware**
 
@@ -69,6 +68,8 @@ For me this usually says something `dev/usbserial...`
 
 You will only need the device plugged in on your first upload, after that you should see your devices name and it's IP address in the port list.
 
+For calibration storage, use a flash layout with a LittleFS partition, such as the D1 mini's 4 MB flash layout with 2 MB for the filesystem. Keep the same flash layout for later updates. For wired uploads, use **Only Sketch** to preserve saved calibration. The **All Flash Contents** setting shown above erases it.
+
 Now you just click on the upload button in the top left corner of the IDE, it's the right-facing arrow.
 
 After a bit of time compiling, the script should be uploaded to the device and begin scanning for the car.
@@ -98,6 +99,19 @@ Alternatively you can add a new `cover` to the `configuration.yaml` like this:
       optimistic: true
       device_class: garage
 
+## Calibrating the door sensor
+
+With MQTT discovery enabled, open the garage controller device in Home Assistant. It has a **Calibrate Door** button and a **Door Calibration** sensor that shows the current instruction or result.
+
+1. Press **Calibrate Door**. The garage door state becomes **Unknown**.
+2. Manually open the door fully, then press **Calibrate Door** again. Leave the door fully open while it samples for two minutes.
+3. When the sensor asks you to close the door, manually close it fully and press **Calibrate Door**. Leave it closed for the second two-minute sampling window.
+4. After a successful calibration, the cover reports **Closed** and resumes normal operation. The sensor shows the two ADC switching thresholds, which the controller saves to flash for future restarts.
+
+Home Assistant door commands are disabled during calibration. If calibration fails, **Door Calibration** shows the reason and the cover stays **Unknown**. Press **Calibrate Door** to retry, or power-cycle the controller to resume using the last saved calibration or the configured `openThreshold` if there is no saved calibration.
+
+The firmware filters short ADC spikes with a median of five samples and rejects calibration when the filtered open and closed ranges are too close or reversed. Separate switching thresholds hold the last known state when readings land between them. The sampling time for each position is set by `calibrationMinutes` in the sketch.
+
 ## Finshed Product ##
 
 Here is what the final project looks like for me now:
@@ -106,6 +120,13 @@ Here is what the final project looks like for me now:
 ![In the Wild](files/in_the_wild.jpg)
 
 ## Changelog ##
+
+### Version 2.0.0 - Home Assistant calibration ###
+
+* Added a **Calibrate Door** button and a **Door Calibration** sensor through MQTT discovery. The sensor guides you through two-minute sampling windows with the door fully open and fully closed. The cover reports **Unknown** and pauses Home Assistant door commands during calibration.
+* Added median filtering and separate open and closed switching thresholds to reduce false state changes from noisy ADC readings.
+* Saved successful calibrations to flash. If calibration fails, the sensor shows the reason and you can retry or restart the controller to restore the last saved thresholds or the configured default.
+* Stopped retaining MQTT door commands so a reconnect cannot replay an old movement request.
 
 ### Version 1.3 - Bug fixes ###
 
